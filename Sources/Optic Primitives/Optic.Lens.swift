@@ -1,6 +1,8 @@
 // Optic.Lens.swift
 // A focus on exactly one field within a product type.
 
+public import Witness_Primitives
+
 extension Optic {
     /// A focus on exactly one field within a product type.
     ///
@@ -36,7 +38,7 @@ extension Optic {
     /// nameLens.get(user)                    // "Alice"
     /// nameLens.set(user, "Bob")             // User(name: "Bob", age: 30)
     /// ```
-    public struct Lens<Whole, Part>: Sendable {
+    public struct Lens<Whole, Part>: Sendable, Witness.`Protocol` {
         /// Extracts `Part` from `Whole`.
         public let get: @Sendable (Whole) -> Part
 

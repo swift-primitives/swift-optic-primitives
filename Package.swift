@@ -18,11 +18,14 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(path: "../swift-witness-primitives"),
     ],
     targets: [
         .target(
             name: "Optic Primitives",
-            dependencies: []
+            dependencies: [
+                .product(name: "Witness Primitives", package: "swift-witness-primitives"),
+            ]
         )
     ],
     swiftLanguageModes: [.v6]

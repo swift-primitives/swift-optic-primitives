@@ -1,6 +1,8 @@
 // Optic.Prism.swift
 // A partial isomorphism between Whole and Part.
 
+public import Witness_Primitives
+
 extension Optic {
     /// A partial isomorphism between `Whole` and `Part`.
     ///
@@ -36,7 +38,7 @@ extension Optic {
     /// successPrism.extract(.failure(someError)) // nil
     /// ```
     @dynamicMemberLookup
-    public struct Prism<Whole, Part>: Sendable {
+    public struct Prism<Whole, Part>: Sendable, Witness.`Protocol` {
         /// Unconditionally constructs `Whole` from `Part`.
         public let embed: @Sendable (Part) -> Whole
 
