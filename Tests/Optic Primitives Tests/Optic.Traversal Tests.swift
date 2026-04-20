@@ -8,16 +8,16 @@ struct TraversalTests {
 
     // MARK: - Basic Operations
 
-    @Test("get extracts all focused values")
-    func getExtractsAll() {
+    @Test
+    func `get extracts all focused values`() {
         let each: Optic.Traversal<[Int], Int> = .each
 
         #expect(each.get([1, 2, 3]) == [1, 2, 3])
         #expect(each.get([]) == [])
     }
 
-    @Test("modify transforms all focused values")
-    func modifyTransformsAll() {
+    @Test
+    func `modify transforms all focused values`() {
         let each: Optic.Traversal<[Int], Int> = .each
 
         let result = each.modify([1, 2, 3]) { $0 * 2 }
@@ -26,8 +26,8 @@ struct TraversalTests {
 
     // MARK: - Composition
 
-    @Test("composing chains two traversals")
-    func composing() {
+    @Test
+    func `composing chains two traversals`() {
         let outerEach: Optic.Traversal<[[Int]], [Int]> = .each
         let innerEach: Optic.Traversal<[Int], Int> = .each
 
@@ -40,8 +40,8 @@ struct TraversalTests {
         #expect(result == [[10, 20], [30, 40, 50]])
     }
 
-    @Test("appending chains traversals")
-    func appending() {
+    @Test
+    func `appending chains traversals`() {
         let outerEach: Optic.Traversal<[[Int]], [Int]> = .each
         let innerEach: Optic.Traversal<[Int], Int> = .each
 
@@ -56,8 +56,8 @@ struct TraversalTests {
 
     // MARK: - Identity
 
-    @Test("identity focuses on the single whole value")
-    func identity() {
+    @Test
+    func `identity focuses on the single whole value`() {
         let id: Optic.Traversal<Int, Int> = .identity
 
         #expect(id.get(42) == [42])
@@ -66,24 +66,24 @@ struct TraversalTests {
 
     // MARK: - Convenience
 
-    @Test("set sets all focused values to the same value")
-    func setAllValues() {
+    @Test
+    func `set sets all focused values to the same value`() {
         let each: Optic.Traversal<[Int], Int> = .each
 
         let result = each.set([1, 2, 3], 99)
         #expect(result == [99, 99, 99])
     }
 
-    @Test("count returns number of focused elements")
-    func countElements() {
+    @Test
+    func `count returns number of focused elements`() {
         let each: Optic.Traversal<[Int], Int> = .each
 
         #expect(each.count([1, 2, 3]) == 3)
         #expect(each.count([]) == 0)
     }
 
-    @Test("isEmpty returns true when no focused elements")
-    func isEmptyCheck() {
+    @Test
+    func `isEmpty returns true when no focused elements`() {
         let each: Optic.Traversal<[Int], Int> = .each
 
         #expect(each.isEmpty([1, 2, 3]) == false)
@@ -92,8 +92,8 @@ struct TraversalTests {
 
     // MARK: - Array Traversal
 
-    @Test("each focuses on all array elements")
-    func eachTraversal() {
+    @Test
+    func `each focuses on all array elements`() {
         let each: Optic.Traversal<[String], String> = .each
 
         #expect(each.get(["a", "b", "c"]) == ["a", "b", "c"])
@@ -102,8 +102,8 @@ struct TraversalTests {
 
     // MARK: - Construction from Affine
 
-    @Test("init from Affine")
-    func initFromAffine() {
+    @Test
+    func `init from Affine`() {
         let firstAffine = Optic.Affine<[Int], Int>(
             extract: { $0.first },
             set: { array, value in
@@ -123,8 +123,8 @@ struct TraversalTests {
 
     // MARK: - Construction from Lens
 
-    @Test("init from Lens")
-    func initFromLens() {
+    @Test
+    func `init from Lens`() {
         struct Point: Equatable, Sendable {
             var x: Int
             var y: Int
@@ -144,8 +144,8 @@ struct TraversalTests {
 
     // MARK: - Construction from Prism
 
-    @Test("init from Prism")
-    func initFromPrism() {
+    @Test
+    func `init from Prism`() {
         let somePrism = Optic.Prism<Int?, Int>(
             embed: { $0 },
             extract: { $0 }
@@ -161,8 +161,8 @@ struct TraversalTests {
 
     // MARK: - Construction from Iso
 
-    @Test("init from Iso")
-    func initFromIso() {
+    @Test
+    func `init from Iso`() {
         let iso = Optic.Iso<[Int], [Int]>(
             forward: { $0.reversed() },
             backward: { $0.reversed() }
@@ -177,8 +177,8 @@ struct TraversalTests {
 
     // MARK: - Real-world Examples
 
-    @Test("nested array modification")
-    func nestedArrayExample() {
+    @Test
+    func `nested array modification`() {
         struct Document: Equatable, Sendable {
             var sections: [[String]]
         }

@@ -8,8 +8,8 @@ struct IsoTests {
 
     // MARK: - Basic Operations
 
-    @Test("forward transforms Whole to Part")
-    func forward() {
+    @Test
+    func `forward transforms Whole to Part`() {
         let iso = Optic.Iso<Int, String>(
             forward: { String($0) },
             backward: { Int($0)! }
@@ -20,8 +20,8 @@ struct IsoTests {
         #expect(iso.forward(-1) == "-1")
     }
 
-    @Test("backward transforms Part to Whole")
-    func backward() {
+    @Test
+    func `backward transforms Part to Whole`() {
         let iso = Optic.Iso<Int, String>(
             forward: { String($0) },
             backward: { Int($0)! }
@@ -34,8 +34,8 @@ struct IsoTests {
 
     // MARK: - Laws
 
-    @Test("roundtrip law: backward(forward(whole)) == whole")
-    func roundtripForwardBackward() {
+    @Test
+    func `roundtrip law: backward(forward(whole)) == whole`() {
         let iso = Optic.Iso<Int, String>(
             forward: { String($0) },
             backward: { Int($0)! }
@@ -46,8 +46,8 @@ struct IsoTests {
         }
     }
 
-    @Test("roundtrip law: forward(backward(part)) == part")
-    func roundtripBackwardForward() {
+    @Test
+    func `roundtrip law: forward(backward(part)) == part`() {
         let iso = Optic.Iso<Int, String>(
             forward: { String($0) },
             backward: { Int($0)! }
@@ -60,8 +60,8 @@ struct IsoTests {
 
     // MARK: - Reversal
 
-    @Test("reversed swaps forward and backward")
-    func reversed() {
+    @Test
+    func `reversed swaps forward and backward`() {
         let iso = Optic.Iso<Int, String>(
             forward: { String($0) },
             backward: { Int($0)! }
@@ -75,8 +75,8 @@ struct IsoTests {
 
     // MARK: - Composition
 
-    @Test("composing chains two isos")
-    func composing() {
+    @Test
+    func `composing chains two isos`() {
         let intToString = Optic.Iso<Int, String>(
             forward: { String($0) },
             backward: { Int($0)! }
@@ -93,8 +93,8 @@ struct IsoTests {
         #expect(composed.backward(["4", "2"]) == 42)
     }
 
-    @Test("appending chains isos")
-    func appending() {
+    @Test
+    func `appending chains isos`() {
         let intToString = Optic.Iso<Int, String>(
             forward: { String($0) },
             backward: { Int($0)! }
@@ -113,8 +113,8 @@ struct IsoTests {
 
     // MARK: - Identity
 
-    @Test("identity passes values through unchanged")
-    func identity() {
+    @Test
+    func `identity passes values through unchanged`() {
         let id: Optic.Iso<Int, Int> = .identity
 
         #expect(id.forward(42) == 42)
@@ -123,8 +123,8 @@ struct IsoTests {
 
     // MARK: - Modification
 
-    @Test("modify applies transformation via iso")
-    func modify() {
+    @Test
+    func `modify applies transformation via iso`() {
         let iso = Optic.Iso<[Int], [Int]>(
             forward: { $0.reversed() },
             backward: { $0.reversed() }
@@ -134,8 +134,8 @@ struct IsoTests {
         #expect(result == [2, 4, 6])
     }
 
-    @Test("modify in place")
-    func modifyInPlace() {
+    @Test
+    func `modify in place`() {
         let iso = Optic.Iso<[Int], [Int]>(
             forward: { $0.reversed() },
             backward: { $0.reversed() }

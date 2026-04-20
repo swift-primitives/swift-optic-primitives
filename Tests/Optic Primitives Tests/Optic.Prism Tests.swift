@@ -23,14 +23,14 @@ struct PrismTests {
 
     // MARK: - Basic Operations
 
-    @Test("embed constructs Whole from Part")
-    func embed() {
+    @Test
+    func `embed constructs Whole from Part`() {
         #expect(Self.successPrism.embed(42) == .success(42))
         #expect(Self.failurePrism.embed("error") == .failure("error"))
     }
 
-    @Test("extract optionally extracts Part from Whole")
-    func extract() {
+    @Test
+    func `extract optionally extracts Part from Whole`() {
         #expect(Self.successPrism.extract(.success(42)) == 42)
         #expect(Self.successPrism.extract(.failure("error")) == nil)
         #expect(Self.failurePrism.extract(.failure("error")) == "error")
@@ -39,14 +39,14 @@ struct PrismTests {
 
     // MARK: - Laws
 
-    @Test("roundtrip law: extract(embed(part)) == part")
-    func roundtripLaw() {
+    @Test
+    func `roundtrip law: extract(embed(part)) == part`() {
         let part = 42
         #expect(Self.successPrism.extract(Self.successPrism.embed(part)) == part)
     }
 
-    @Test("embed after extract: embed(extract(whole)) == whole when extract succeeds")
-    func embedAfterExtract() {
+    @Test
+    func `embed after extract: embed(extract(whole)) == whole when extract succeeds`() {
         let whole: Result<Int> = .success(42)
         if let extracted = Self.successPrism.extract(whole) {
             #expect(Self.successPrism.embed(extracted) == whole)
@@ -55,8 +55,8 @@ struct PrismTests {
 
     // MARK: - Composition
 
-    @Test("composing chains two prisms")
-    func composing() {
+    @Test
+    func `composing chains two prisms`() {
         let outerPrism = Optic.Prism<Result<Result<Int>>, Result<Int>>(
             embed: { .success($0) },
             extract: { if case .success(let v) = $0 { return v } else { return nil } }
@@ -69,8 +69,8 @@ struct PrismTests {
         #expect(composed.embed(42) == .success(.success(42)))
     }
 
-    @Test("appending chains prisms")
-    func appending() {
+    @Test
+    func `appending chains prisms`() {
         let outerPrism = Optic.Prism<Result<Result<Int>>, Result<Int>>(
             embed: { .success($0) },
             extract: { if case .success(let v) = $0 { return v } else { return nil } }
@@ -85,8 +85,8 @@ struct PrismTests {
 
     // MARK: - Identity
 
-    @Test("identity passes values through unchanged")
-    func identity() {
+    @Test
+    func `identity passes values through unchanged`() {
         let id: Optic.Prism<Int, Int> = .identity
 
         #expect(id.embed(42) == 42)
@@ -95,28 +95,28 @@ struct PrismTests {
 
     // MARK: - Convenience
 
-    @Test("matches returns true when extraction succeeds")
-    func matches() {
+    @Test
+    func `matches returns true when extraction succeeds`() {
         #expect(Self.successPrism.matches(.success(42)) == true)
         #expect(Self.successPrism.matches(.failure("error")) == false)
     }
 
-    @Test("modify transforms the part if present")
-    func modify() {
+    @Test
+    func `modify transforms the part if present`() {
         let whole: Result<Int> = .success(42)
         let result = Self.successPrism.modify(whole) { $0 * 2 }
         #expect(result == .success(84))
     }
 
-    @Test("modify returns whole unchanged when extraction fails")
-    func modifyNoMatch() {
+    @Test
+    func `modify returns whole unchanged when extraction fails`() {
         let whole: Result<Int> = .failure("error")
         let result = Self.successPrism.modify(whole) { $0 * 2 }
         #expect(result == .failure("error"))
     }
 
-    @Test("modify in place")
-    func modifyInPlace() {
+    @Test
+    func `modify in place`() {
         var whole: Result<Int> = .success(42)
         Self.successPrism.modify(&whole) { $0 *= 2 }
         #expect(whole == .success(84))
@@ -124,8 +124,8 @@ struct PrismTests {
 
     // MARK: - Construction from Iso
 
-    @Test("init from Iso")
-    func initFromIso() {
+    @Test
+    func `init from Iso`() {
         let iso = Optic.Iso<Int, String>(
             forward: { String($0) },
             backward: { Int($0)! }
@@ -139,8 +139,8 @@ struct PrismTests {
 
     // MARK: - Pattern Matching
 
-    @Test("pattern matching operator")
-    func patternMatching() {
+    @Test
+    func `pattern matching operator`() {
         let value: Result<Int> = .success(42)
 
         switch value {

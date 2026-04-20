@@ -43,15 +43,15 @@ struct LensTests {
 
     // MARK: - Basic Operations
 
-    @Test("get extracts Part from Whole")
-    func get() {
+    @Test
+    func `get extracts Part from Whole`() {
         let user = User(name: "Alice", age: 30)
         #expect(Self.nameLens.get(user) == "Alice")
         #expect(Self.ageLens.get(user) == 30)
     }
 
-    @Test("set replaces Part in Whole")
-    func set() {
+    @Test
+    func `set replaces Part in Whole`() {
         let user = User(name: "Alice", age: 30)
         let updated = Self.nameLens.set(user, "Bob")
 
@@ -61,8 +61,8 @@ struct LensTests {
 
     // MARK: - Laws
 
-    @Test("GetSet law: get(set(whole, part)) == part")
-    func getSetLaw() {
+    @Test
+    func `GetSet law: get(set(whole, part)) == part`() {
         let user = User(name: "Alice", age: 30)
         let newName = "Charlie"
 
@@ -70,16 +70,16 @@ struct LensTests {
         #expect(result == newName)
     }
 
-    @Test("SetGet law: set(whole, get(whole)) == whole")
-    func setGetLaw() {
+    @Test
+    func `SetGet law: set(whole, get(whole)) == whole`() {
         let user = User(name: "Alice", age: 30)
 
         let result = Self.nameLens.set(user, Self.nameLens.get(user))
         #expect(result == user)
     }
 
-    @Test("SetSet law: set(set(whole, a), b) == set(whole, b)")
-    func setSetLaw() {
+    @Test
+    func `SetSet law: set(set(whole, a), b) == set(whole, b)`() {
         let user = User(name: "Alice", age: 30)
 
         let result1 = Self.nameLens.set(Self.nameLens.set(user, "Bob"), "Charlie")
@@ -90,8 +90,8 @@ struct LensTests {
 
     // MARK: - Composition
 
-    @Test("composing chains two lenses")
-    func composing() {
+    @Test
+    func `composing chains two lenses`() {
         let addressLens = Optic.Lens<Person, Address>(
             get: { $0.address },
             set: { Person(user: $0.user, address: $1) }
@@ -111,8 +111,8 @@ struct LensTests {
         #expect(updated.user == person.user)
     }
 
-    @Test("appending chains lenses")
-    func appending() {
+    @Test
+    func `appending chains lenses`() {
         let composed = Self.userLens.appending(Self.nameLens)
 
         let person = Person(
@@ -129,8 +129,8 @@ struct LensTests {
 
     // MARK: - Identity
 
-    @Test("identity passes values through unchanged")
-    func identity() {
+    @Test
+    func `identity passes values through unchanged`() {
         let id: Optic.Lens<Int, Int> = .identity
 
         #expect(id.get(42) == 42)
@@ -139,8 +139,8 @@ struct LensTests {
 
     // MARK: - Modification
 
-    @Test("modify transforms the focused part")
-    func modify() {
+    @Test
+    func `modify transforms the focused part`() {
         let user = User(name: "Alice", age: 30)
         let result = Self.ageLens.modify(user) { $0 + 1 }
 
@@ -148,8 +148,8 @@ struct LensTests {
         #expect(result.name == "Alice")
     }
 
-    @Test("modify in place")
-    func modifyInPlace() {
+    @Test
+    func `modify in place`() {
         var user = User(name: "Alice", age: 30)
         Self.ageLens.modify(&user) { $0 + 1 }
 
@@ -159,8 +159,8 @@ struct LensTests {
 
     // MARK: - Construction from Iso
 
-    @Test("init from Iso")
-    func initFromIso() {
+    @Test
+    func `init from Iso`() {
         let iso = Optic.Iso<Int, String>(
             forward: { String($0) },
             backward: { Int($0)! }
