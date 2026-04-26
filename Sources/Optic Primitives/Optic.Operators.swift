@@ -153,6 +153,119 @@ extension Optic.Prism {
     }
 }
 
+// MARK: - Traversal Composition
+
+extension Optic.Traversal {
+    /// Composes two traversals: `Whole → Middle → Part`.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Traversal<Whole, Middle>,
+        rhs: Optic.Traversal<Middle, Part>
+    ) -> Optic.Traversal<Whole, Part> {
+        lhs.appending(rhs)
+    }
+}
+
+// MARK: - Setter Composition
+
+// Setter is the bottom of the lattice — every other optic kind embeds into a
+// Setter, and any composition involving a Setter on either side yields a Setter.
+
+extension Optic.Setter {
+    /// Composes two setters: `Whole → Middle → Part`.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Setter<Whole, Middle>,
+        rhs: Optic.Setter<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        lhs.appending(rhs)
+    }
+
+    /// Composes a setter with an iso, lifting the iso to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Setter<Whole, Middle>,
+        rhs: Optic.Iso<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        lhs.appending(Optic.Setter(rhs))
+    }
+
+    /// Composes a setter with a lens, lifting the lens to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Setter<Whole, Middle>,
+        rhs: Optic.Lens<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        lhs.appending(Optic.Setter(rhs))
+    }
+
+    /// Composes a setter with a prism, lifting the prism to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Setter<Whole, Middle>,
+        rhs: Optic.Prism<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        lhs.appending(Optic.Setter(rhs))
+    }
+
+    /// Composes a setter with an affine, lifting the affine to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Setter<Whole, Middle>,
+        rhs: Optic.Affine<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        lhs.appending(Optic.Setter(rhs))
+    }
+
+    /// Composes a setter with a traversal, lifting the traversal to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Setter<Whole, Middle>,
+        rhs: Optic.Traversal<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        lhs.appending(Optic.Setter(rhs))
+    }
+}
+
+// MARK: - Iso → Setter Composition
+
+extension Optic.Iso {
+    /// Composes an iso with a setter, lifting the iso to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Iso<Whole, Middle>,
+        rhs: Optic.Setter<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        Optic.Setter(lhs).appending(rhs)
+    }
+}
+
+// MARK: - Lens → Setter Composition
+
+extension Optic.Lens {
+    /// Composes a lens with a setter, lifting the lens to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Lens<Whole, Middle>,
+        rhs: Optic.Setter<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        Optic.Setter(lhs).appending(rhs)
+    }
+}
+
+// MARK: - Prism → Setter Composition
+
+extension Optic.Prism {
+    /// Composes a prism with a setter, lifting the prism to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Prism<Whole, Middle>,
+        rhs: Optic.Setter<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        Optic.Setter(lhs).appending(rhs)
+    }
+}
+
 // MARK: - Affine Composition
 
 extension Optic.Affine {
@@ -190,5 +303,27 @@ extension Optic.Affine {
         rhs: Optic.Prism<Middle, Part>
     ) -> Optic.Affine<Whole, Part> {
         lhs.appending(Optic.Affine(rhs))
+    }
+
+    /// Composes an affine with a setter, lifting the affine to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Affine<Whole, Middle>,
+        rhs: Optic.Setter<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        Optic.Setter(lhs).appending(rhs)
+    }
+}
+
+// MARK: - Traversal → Setter Composition
+
+extension Optic.Traversal {
+    /// Composes a traversal with a setter, lifting the traversal to a setter first.
+    @inlinable
+    public static func >>> <Middle>(
+        lhs: Optic.Traversal<Whole, Middle>,
+        rhs: Optic.Setter<Middle, Part>
+    ) -> Optic.Setter<Whole, Part> {
+        Optic.Setter(lhs).appending(rhs)
     }
 }
