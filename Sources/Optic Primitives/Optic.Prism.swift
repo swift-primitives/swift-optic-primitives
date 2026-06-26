@@ -157,7 +157,9 @@ extension Optic.Prism {
 
 // MARK: - Accessible Protocol (Hoisted)
 
-/// Hoisted protocol for `Optic.Prism.Accessible`. Prefer using `Optic.Prism.Accessible` in all contexts.
+/// Hoisted protocol for `Optic.Prism.Accessible`.
+///
+/// Prefer using `Optic.Prism.Accessible` in all contexts.
 ///
 /// This protocol is intentionally not constrained to `Sendable` to allow unconditional
 /// conformance for generic stdlib types like `Optional` and `Result`. Individual prism
@@ -179,7 +181,7 @@ extension Optic.Prism {
 
 // MARK: - Dynamic Member Lookup for Composition
 
-extension Optic.Prism where Part: Optic.Prism.Accessible {
+extension Optic.Prism where Part: Self.Accessible {
     /// Enables ergonomic prism composition via dot syntax.
     ///
     /// When the `Part` type conforms to `Optic.Prism.Accessible`, you can chain

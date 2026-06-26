@@ -1,4 +1,4 @@
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 //
 // This source file is part of the swift-optic-primitives open source project
 //
@@ -10,7 +10,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 //
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 
 extension Result: Optic.Prism.Accessible {
     /// Prisms for accessing Result cases.
@@ -27,7 +27,7 @@ extension Result: Optic.Prism.Accessible {
             Optic.Prism(
                 embed: Result.success,
                 extract: {
-                    guard case let .success(value) = $0 else { return nil }
+                    guard case .success(let value) = $0 else { return nil }
                     return value
                 }
             )
@@ -41,7 +41,7 @@ extension Result: Optic.Prism.Accessible {
             Optic.Prism(
                 embed: Result.failure,
                 extract: {
-                    guard case let .failure(error) = $0 else { return nil }
+                    guard case .failure(let error) = $0 else { return nil }
                     return error
                 }
             )

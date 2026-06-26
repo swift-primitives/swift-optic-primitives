@@ -1,4 +1,4 @@
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 //
 // This source file is part of the swift-optic-primitives open source project
 //
@@ -10,7 +10,7 @@
 //
 // SPDX-License-Identifier: Apache-2.0
 //
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 
 extension Optional: Optic.Prism.Accessible {
     /// Prisms for accessing Optional cases.
@@ -65,12 +65,14 @@ extension Optional: Optic.Prism.Accessible {
         public subscript<Member>(
             dynamicMember keyPath: KeyPath<Wrapped.Prisms, Optic.Prism<Wrapped, Member>>
         ) -> Optic.Prism<Optional, Member?>
-        where Wrapped: Optic.Prism.Accessible {
+        where Wrapped: Optic.Prism.Accessible & Sendable, Member: Sendable {
             let prism = Wrapped.prisms[keyPath: keyPath]
+            let embed = prism.embed
+            let extract = prism.extract
             return Optic.Prism(
-                embed: { $0.map(prism.embed) },
+                embed: { $0.map(embed) },
                 extract: {
-                    guard case let .some(wrapped) = $0, let member = prism.extract(wrapped)
+                    guard case .some(let wrapped) = $0, let member = extract(wrapped)
                     else { return .none }
                     return member
                 }
