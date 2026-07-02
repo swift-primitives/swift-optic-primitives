@@ -1,6 +1,6 @@
 # .github/metadata.yaml
 # Triaged by AI-assisted bulk pass (2026-04-29).
-description: "Optic types for Swift."
+description: "Composable Lens, Prism, Affine, and Traversal optics chained through a single >>> operator for Swift."
 topics:
   - primitives
   - optic
