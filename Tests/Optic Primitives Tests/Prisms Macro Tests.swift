@@ -168,6 +168,7 @@ extension `Prisms Macro`.Integration {
         switch route {
         case Route.prisms.detail:
             #expect(Bool(true))
+
         default:
             Issue.record("expected the detail prism to match")
         }

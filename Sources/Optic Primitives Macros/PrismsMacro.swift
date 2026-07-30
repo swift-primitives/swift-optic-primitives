@@ -14,6 +14,21 @@ public struct PrismsMacro {}
 // MARK: - Member Macro
 
 extension PrismsMacro: MemberMacro {
+    // reason: structural bottom-out — MemberMacro.expansion(of:providingMembersOf:
+    // conformingTo:in:) is a fixed SwiftSyntaxMacros protocol requirement using
+    // untyped `throws`; the signature cannot be retyped without breaking
+    // conformance.
+    // swiftlint:disable typed_throws_required
+    /// Generates the nested `Prisms` struct and static `prisms` accessor.
+    ///
+    /// - Parameters:
+    ///   - node: The `@Prisms` attribute syntax.
+    ///   - declaration: The declaration the attribute is attached to.
+    ///   - protocols: The protocols the compiler asks this macro to conform to.
+    ///   - context: The macro expansion context.
+    /// - Throws: ``PrismsMacroError/onlyApplicableToEnum`` when attached to a
+    ///   non-enum declaration.
+    /// - Returns: The generated `Prisms` struct and `prisms` accessor declarations.
     public static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
@@ -55,11 +70,30 @@ extension PrismsMacro: MemberMacro {
             DeclSyntax(stringLiteral: prismsAccessor),
         ]
     }
+    // swiftlint:enable typed_throws_required
 }
 
 // MARK: - Extension Macro
 
 extension PrismsMacro: ExtensionMacro {
+    // reason: structural bottom-out — ExtensionMacro.expansion(of:attachedTo:
+    // providingExtensionsOf:conformingTo:in:) is a fixed SwiftSyntaxMacros
+    // protocol requirement using untyped `throws`; the signature cannot be
+    // retyped without breaking conformance.
+    // swiftlint:disable typed_throws_required
+    /// Generates the `Optic.Prism.Accessible` conformance extension.
+    ///
+    /// - Parameters:
+    ///   - node: The `@Prisms` attribute syntax.
+    ///   - declaration: The declaration the attribute is attached to.
+    ///   - type: The type the extension is generated for.
+    ///   - protocols: The protocols the compiler asks this macro to conform to;
+    ///     empty when the conformance already exists.
+    ///   - context: The macro expansion context.
+    /// - Throws: ``PrismsMacroError/onlyApplicableToEnum`` when attached to a
+    ///   non-enum declaration.
+    /// - Returns: The generated conformance extension, or an empty array when
+    ///   the conformance already exists.
     public static func expansion(
         of node: AttributeSyntax,
         attachedTo declaration: some DeclGroupSyntax,
@@ -79,6 +113,7 @@ extension PrismsMacro: ExtensionMacro {
         )
         return [ext]
     }
+    // swiftlint:enable typed_throws_required
 }
 
 // MARK: - Code Generation
