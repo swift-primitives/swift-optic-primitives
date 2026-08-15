@@ -126,7 +126,9 @@ extension SetterTests.Integration {
         )
         let setter = Optic.Setter(nameLens)
         let alice = SetterTests.User(name: "Alice", age: 30)
-        #expect(setter.over(alice) { $0.lowercased() } == nameLens.modify(alice) { $0.lowercased() })
+        #expect(
+            setter.over(alice) { $0.lowercased() } == nameLens.modify(alice) { $0.lowercased() }
+        )
     }
 
     @Test
