@@ -77,7 +77,8 @@ extension Optic.Traversal {
     /// - Parameter next: The traversal to append.
     /// - Returns: A composed traversal from `Whole` to `Next`.
     @inlinable
-    public func appending<Next>(_ next: Optic.Traversal<Part, Next>) -> Optic.Traversal<Whole, Next> {
+    public func appending<Next>(_ next: Optic.Traversal<Part, Next>) -> Optic.Traversal<Whole, Next>
+    {
         Optic.Traversal<Whole, Next>.composing(self, next)
     }
 }
