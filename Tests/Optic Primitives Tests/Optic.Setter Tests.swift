@@ -1,5 +1,3 @@
-// Optic.Setter Tests.swift
-
 import Testing
 
 @testable import Optic_Primitives
@@ -87,7 +85,7 @@ extension SetterTests.Laws {
 
     @Test
     func `identity law: over with id is identity`() {
-        // Setter law 1: over(whole, id) == whole
+
         let alice = SetterTests.User(name: "Alice", age: 30)
         #expect(SetterTests.nameSetter.over(alice) { $0 } == alice)
         #expect(SetterTests.ageSetter.over(alice) { $0 } == alice)
@@ -98,7 +96,7 @@ extension SetterTests.Laws {
 
     @Test
     func `composition law: sequential over equals composed transform`() {
-        // Setter law 2: over(over(whole, f), g) == over(whole, { g(f($0)) })
+
         let alice = SetterTests.User(name: "alice", age: 30)
         let f: @Sendable (String) -> String = { $0.uppercased() }
         let g: @Sendable (String) -> String = { $0 + "!" }
@@ -138,7 +136,7 @@ extension SetterTests.Integration {
             backward: { -$0 }
         )
         let setter = Optic.Setter(mirror)
-        // forward then transform then backward: -(-(7) + 1) = -(-7 + 1) = -(-6) = 6
+
         #expect(setter.over(7) { $0 + 1 } == 6)
     }
 

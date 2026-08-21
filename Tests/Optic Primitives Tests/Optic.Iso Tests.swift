@@ -1,13 +1,9 @@
-// Optic.Iso Tests.swift
-
 import Testing
 
 @testable import Optic_Primitives
 
 @Suite("Optic.Iso")
 struct IsoTests {
-
-    // MARK: - Basic Operations
 
     @Test
     func `forward transforms Whole to Part`() {
@@ -33,8 +29,6 @@ struct IsoTests {
         #expect(iso.backward("-1") == -1)
     }
 
-    // MARK: - Laws
-
     @Test
     func `roundtrip law: backward(forward(whole)) == whole`() {
         let iso = Optic.Iso<Int, String>(
@@ -59,8 +53,6 @@ struct IsoTests {
         }
     }
 
-    // MARK: - Reversal
-
     @Test
     func `reversed swaps forward and backward`() {
         let iso = Optic.Iso<Int, String>(
@@ -73,8 +65,6 @@ struct IsoTests {
         #expect(reversed.forward("42") == 42)
         #expect(reversed.backward(42) == "42")
     }
-
-    // MARK: - Composition
 
     @Test
     func `composing chains two isos`() {
@@ -112,8 +102,6 @@ struct IsoTests {
         #expect(composed.backward(["4", "2"]) == 42)
     }
 
-    // MARK: - Identity
-
     @Test
     func `identity passes values through unchanged`() {
         let id: Optic.Iso<Int, Int> = .identity
@@ -122,15 +110,13 @@ struct IsoTests {
         #expect(id.backward(42) == 42)
     }
 
-    // MARK: - Modification
-
     @Test
     func `modify applies transformation via iso`() {
         let iso = Optic.Iso<[Int], [Int]>(
             forward: { $0.reversed() },
             backward: { $0.reversed() }
         )
-        // [1, 2, 3] forward -> [3, 2, 1] -> map *2 -> [6, 4, 2] -> backward -> [2, 4, 6]
+
         let result = iso.modify([1, 2, 3]) { $0.map { $0 * 2 } }
         #expect(result == [2, 4, 6])
     }
@@ -141,7 +127,7 @@ struct IsoTests {
             forward: { $0.reversed() },
             backward: { $0.reversed() }
         )
-        // [1, 2, 3] forward -> [3, 2, 1] -> map *2 -> [6, 4, 2] -> backward -> [2, 4, 6]
+
         var value = [1, 2, 3]
         iso.modify(&value) { $0.map { $0 * 2 } }
 
@@ -192,8 +178,6 @@ struct `Iso - Basic Operations` {
     }
 }
 
-// MARK: - Iso Reversal Tests
-
 @Suite
 struct `Iso - Reversal` {
     @Test
@@ -220,8 +204,6 @@ struct `Iso - Reversal` {
         #expect(doubleReversed.backward("42") == iso.backward("42"))
     }
 }
-
-// MARK: - Iso Composition Tests
 
 @Suite
 struct `Iso - Composition` {
@@ -274,8 +256,6 @@ struct `Iso - Composition` {
     }
 }
 
-// MARK: - Iso Identity Tests
-
 @Suite
 struct `Iso - Identity` {
     @Test
@@ -291,8 +271,6 @@ struct `Iso - Identity` {
     }
 }
 
-// MARK: - Iso Modification Tests
-
 @Suite
 struct `Iso - Modification` {
     @Test
@@ -302,9 +280,8 @@ struct `Iso - Modification` {
             backward: { ($0 - 32) * 5 / 9 }
         )
 
-        // Modify in Fahrenheit domain: add 18°F
         let result = celsiusToFahrenheit.modify(0) { $0 + 18 }
-        #expect(result == 10)  // 0°C → 32°F → 50°F → 10°C
+        #expect(result == 10)
     }
 
     @Test
@@ -316,11 +293,9 @@ struct `Iso - Modification` {
 
         var value = 10
         iso.modify(&value) { $0 + 4 }
-        #expect(value == 12)  // 10 → 20 → 24 → 12
+        #expect(value == 12)
     }
 }
-
-// MARK: - Iso to Lens Conversion Tests
 
 @Suite
 struct `Iso - Conversion to Lens` {
@@ -343,13 +318,10 @@ struct `Iso - Conversion to Lens` {
         )
         let lens = Optic.Lens(iso)
 
-        // For an iso-derived lens, set replaces the whole entirely
         let result = lens.set(999, "42")
         #expect(result == 42)
     }
 }
-
-// MARK: - Iso to Prism Conversion Tests
 
 @Suite
 struct `Iso - Conversion to Prism` {

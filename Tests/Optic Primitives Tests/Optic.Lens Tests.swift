@@ -1,5 +1,3 @@
-// Optic.Lens Tests.swift
-
 import Testing
 
 @testable import Optic_Primitives
@@ -42,8 +40,6 @@ struct LensTests {
         set: { Address(city: $1, zip: $0.zip) }
     )
 
-    // MARK: - Basic Operations
-
     @Test
     func `get extracts Part from Whole`() {
         let user = User(name: "Alice", age: 30)
@@ -59,8 +55,6 @@ struct LensTests {
         #expect(updated.name == "Bob")
         #expect(updated.age == 30)
     }
-
-    // MARK: - Laws
 
     @Test
     func `GetSet law: get(set(whole, part)) == part`() {
@@ -88,8 +82,6 @@ struct LensTests {
 
         #expect(result1 == result2)
     }
-
-    // MARK: - Composition
 
     @Test
     func `composing chains two lenses`() {
@@ -128,8 +120,6 @@ struct LensTests {
         #expect(updated.address == person.address)
     }
 
-    // MARK: - Identity
-
     @Test
     func `identity passes values through unchanged`() {
         let id: Optic.Lens<Int, Int> = .identity
@@ -137,8 +127,6 @@ struct LensTests {
         #expect(id.get(42) == 42)
         #expect(id.set(42, 100) == 100)
     }
-
-    // MARK: - Modification
 
     @Test
     func `modify transforms the focused part`() {
@@ -158,8 +146,6 @@ struct LensTests {
         #expect(user.name == "Alice")
     }
 
-    // MARK: - Construction from Iso
-
     @Test
     func `init from Iso`() {
         let iso = Optic.Iso<Int, String>(
@@ -173,8 +159,6 @@ struct LensTests {
         #expect(lens.set(42, "100") == 100)
     }
 }
-
-// MARK: - Test Helpers
 
 struct Point: Equatable, Sendable {
     var x: Int
@@ -247,8 +231,6 @@ extension Address {
     }
 }
 
-// MARK: - Lens Basic Tests
-
 @Suite
 struct `Lens - Basic Operations` {
     @Test
@@ -271,8 +253,6 @@ struct `Lens - Basic Operations` {
         #expect(result.y == 20)
     }
 }
-
-// MARK: - Lens Law Tests
 
 @Suite
 struct `Lens - Laws` {
@@ -301,8 +281,6 @@ struct `Lens - Laws` {
         #expect(result1 == result2)
     }
 }
-
-// MARK: - Lens Composition Tests
 
 @Suite
 struct `Lens - Composition` {
@@ -350,8 +328,6 @@ struct `Lens - Composition` {
     }
 }
 
-// MARK: - Lens Identity Tests
-
 @Suite
 struct `Lens - Identity` {
     @Test
@@ -366,8 +342,6 @@ struct `Lens - Identity` {
         #expect(lens.set(999, 42) == 42)
     }
 }
-
-// MARK: - Lens Modification Tests
 
 @Suite
 struct `Lens - Modification` {
@@ -390,15 +364,12 @@ struct `Lens - Modification` {
         let point = Point(x: 10, y: 20)
         let transform: (Int) -> Int = { $0 + 5 }
 
-        // modify should be equivalent to get, transform, set
         let viaModify = Point.xLens.modify(point, transform)
         let viaGetSet = Point.xLens.set(point, transform(Point.xLens.get(point)))
 
         #expect(viaModify == viaGetSet)
     }
 }
-
-// MARK: - Lens from Iso Tests
 
 @Suite
 struct `Lens - Construction from Iso` {

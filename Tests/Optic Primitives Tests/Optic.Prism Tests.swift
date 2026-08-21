@@ -1,5 +1,3 @@
-// Optic.Prism Tests.swift
-
 import Testing
 
 @testable import Optic_Primitives
@@ -28,8 +26,6 @@ struct PrismTests {
         }
     )
 
-    // MARK: - Basic Operations
-
     @Test
     func `embed constructs Whole from Part`() {
         #expect(Self.successPrism.embed(42) == .success(42))
@@ -44,8 +40,6 @@ struct PrismTests {
         #expect(Self.failurePrism.extract(.success(42)) == nil)
     }
 
-    // MARK: - Laws
-
     @Test
     func `roundtrip law: extract(embed(part)) == part`() {
         let part = 42
@@ -59,8 +53,6 @@ struct PrismTests {
             #expect(Self.successPrism.embed(extracted) == whole)
         }
     }
-
-    // MARK: - Composition
 
     @Test
     func `composing chains two prisms`() {
@@ -96,8 +88,6 @@ struct PrismTests {
         #expect(composed.embed(42) == .success(.success(42)))
     }
 
-    // MARK: - Identity
-
     @Test
     func `identity passes values through unchanged`() {
         let id: Optic.Prism<Int, Int> = .identity
@@ -105,8 +95,6 @@ struct PrismTests {
         #expect(id.embed(42) == 42)
         #expect(id.extract(42) == 42)
     }
-
-    // MARK: - Convenience
 
     @Test
     func `matches returns true when extraction succeeds`() {
@@ -135,8 +123,6 @@ struct PrismTests {
         #expect(whole == .success(84))
     }
 
-    // MARK: - Construction from Iso
-
     @Test
     func `init from Iso`() {
         let iso = Optic.Iso<Int, String>(
@@ -150,15 +136,13 @@ struct PrismTests {
         #expect(prism.extract(42) == "42")
     }
 
-    // MARK: - Pattern Matching
-
     @Test
     func `pattern matching operator`() {
         let value: Result<Int> = .success(42)
 
         switch value {
         case Self.successPrism:
-            // Expected
+
             break
 
         default:
@@ -166,8 +150,6 @@ struct PrismTests {
         }
     }
 }
-
-// MARK: - Test Helpers
 
 enum TestEnum: Hashable, Sendable {
     case intCase(Int)
@@ -207,8 +189,6 @@ extension TestEnum {
     }
 }
 
-// MARK: - Prism Basic Tests
-
 @Suite
 struct `Prism - Basic Operations` {
     @Test
@@ -241,8 +221,6 @@ struct `Prism - Basic Operations` {
         #expect(extracted == original)
     }
 }
-
-// MARK: - Prism Convenience Tests
 
 @Suite
 struct `Prism - Convenience Methods` {
@@ -301,8 +279,6 @@ struct `Prism - Convenience Methods` {
     }
 }
 
-// MARK: - Prism Identity Tests
-
 @Suite
 struct `Prism - Identity` {
     @Test
@@ -318,13 +294,11 @@ struct `Prism - Identity` {
     }
 }
 
-// MARK: - Prism Composition Tests
-
 @Suite
 struct `Prism - Composition` {
     @Test
     func `composing two prisms embeds correctly`() {
-        // Compose Optional<Result<Int, Error>> prisms
+
         let optionalPrism = Result<Int, TestError>?.prisms.some
         let resultPrism = Result<Int, TestError>.prisms.success
 
@@ -377,8 +351,6 @@ struct `Prism - Composition` {
     }
 }
 
-// MARK: - Optional Prism Tests
-
 @Suite
 struct `Optional - Prism` {
     @Test
@@ -402,8 +374,6 @@ struct `Optional - Prism` {
         #expect(result == nil)
     }
 }
-
-// MARK: - Pattern Matching Tests
 
 @Suite
 struct `Prism - Pattern Matching` {
@@ -450,8 +420,6 @@ struct `Prism - Pattern Matching` {
         #expect(stringPrism ~= value)
     }
 }
-
-// MARK: - Result Prism Tests
 
 enum TestError: Swift.Error, Hashable, Sendable {
     case test

@@ -1,13 +1,9 @@
-// Optic.Traversal Tests.swift
-
 import Testing
 
 @testable import Optic_Primitives
 
 @Suite("Optic.Traversal")
 struct TraversalTests {
-
-    // MARK: - Basic Operations
 
     @Test
     func `get extracts all focused values`() {
@@ -24,8 +20,6 @@ struct TraversalTests {
         let result = each.modify([1, 2, 3]) { $0 * 2 }
         #expect(result == [2, 4, 6])
     }
-
-    // MARK: - Composition
 
     @Test
     func `composing chains two traversals`() {
@@ -55,8 +49,6 @@ struct TraversalTests {
         #expect(result == [[10, 20], [30, 40, 50]])
     }
 
-    // MARK: - Identity
-
     @Test
     func `identity focuses on the single whole value`() {
         let id: Optic.Traversal<Int, Int> = .identity
@@ -64,8 +56,6 @@ struct TraversalTests {
         #expect(id.get(42) == [42])
         #expect(id.modify(42) { $0 * 2 } == 84)
     }
-
-    // MARK: - Convenience
 
     @Test
     func `set sets all focused values to the same value`() {
@@ -91,8 +81,6 @@ struct TraversalTests {
         #expect(each.isEmpty([]) == true)
     }
 
-    // MARK: - Array Traversal
-
     @Test
     func `each focuses on all array elements`() {
         let each: Optic.Traversal<[String], String> = .each
@@ -100,8 +88,6 @@ struct TraversalTests {
         #expect(each.get(["a", "b", "c"]) == ["a", "b", "c"])
         #expect(each.modify(["a", "b", "c"]) { $0.uppercased() } == ["A", "B", "C"])
     }
-
-    // MARK: - Construction from Affine
 
     @Test
     func `init from Affine`() {
@@ -122,8 +108,6 @@ struct TraversalTests {
         #expect(traversal.modify([1, 2, 3]) { $0 * 10 } == [10, 2, 3])
     }
 
-    // MARK: - Construction from Lens
-
     @Test
     func `init from Lens`() {
         struct Point: Equatable, Sendable {
@@ -143,8 +127,6 @@ struct TraversalTests {
         #expect(traversal.modify(point) { $0 * 2 } == Point(x: 20, y: 20))
     }
 
-    // MARK: - Construction from Prism
-
     @Test
     func `init from Prism`() {
         let somePrism = Optic.Prism<Int?, Int>(
@@ -160,8 +142,6 @@ struct TraversalTests {
         #expect(traversal.modify(nil) { $0 * 2 } == nil)
     }
 
-    // MARK: - Construction from Iso
-
     @Test
     func `init from Iso`() {
         let iso = Optic.Iso<[Int], [Int]>(
@@ -172,11 +152,9 @@ struct TraversalTests {
         let traversal = Optic.Traversal(iso)
 
         #expect(traversal.get([1, 2, 3]) == [[3, 2, 1]])
-        // [1, 2, 3] forward -> [3, 2, 1] -> map *2 -> [6, 4, 2] -> backward -> [2, 4, 6]
+
         #expect(traversal.modify([1, 2, 3]) { $0.map { $0 * 2 } } == [2, 4, 6])
     }
-
-    // MARK: - Real-world Examples
 
     @Test
     func `nested array modification`() {

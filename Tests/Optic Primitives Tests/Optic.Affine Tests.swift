@@ -1,5 +1,3 @@
-// Optic.Affine Tests.swift
-
 import Testing
 
 @testable import Optic_Primitives
@@ -27,8 +25,6 @@ struct AffineTests {
         }
     )
 
-    // MARK: - Basic Operations
-
     @Test
     func `extract optionally extracts Part from Whole`() {
         #expect(Self.firstElement.extract([1, 2, 3]) == 1)
@@ -47,8 +43,6 @@ struct AffineTests {
         #expect(result == [])
     }
 
-    // MARK: - Laws
-
     @Test
     func `GetSet when present: extract(set(whole, part)) == part`() {
         let array = [1, 2, 3]
@@ -64,8 +58,6 @@ struct AffineTests {
         let result = Self.firstElement.set(emptyArray, 99)
         #expect(result == emptyArray)
     }
-
-    // MARK: - Composition
 
     @Test
     func `composing chains two affines`() {
@@ -109,8 +101,6 @@ struct AffineTests {
         #expect(updated == [[99, 2], [3, 4]])
     }
 
-    // MARK: - Identity
-
     @Test
     func `identity focuses on the whole value`() {
         let id: Optic.Affine<Int, Int> = .identity
@@ -118,8 +108,6 @@ struct AffineTests {
         #expect(id.extract(42) == 42)
         #expect(id.set(42, 100) == 100)
     }
-
-    // MARK: - Convenience
 
     @Test
     func `isPresent returns true when extraction succeeds`() {
@@ -146,21 +134,17 @@ struct AffineTests {
         #expect(array == [10, 2, 3])
     }
 
-    // MARK: - Construction from Lens
-
     @Test
     func `init from Lens`() {
         let lens = Optic.Lens<[Int], Int>(
             get: { $0.count },
-            set: { _, _ in [] }  // Just for testing
+            set: { _, _ in [] }
         )
 
         let affine = Optic.Affine(lens)
 
         #expect(affine.extract([1, 2, 3]) == 3)
     }
-
-    // MARK: - Construction from Prism
 
     @Test
     func `init from Prism`() {
@@ -176,8 +160,6 @@ struct AffineTests {
         #expect(affine.set(42, 100) == 100)
     }
 
-    // MARK: - Construction from Iso
-
     @Test
     func `init from Iso`() {
         let iso = Optic.Iso<Int, String>(
@@ -190,8 +172,6 @@ struct AffineTests {
         #expect(affine.extract(42) == "42")
         #expect(affine.set(42, "100") == 100)
     }
-
-    // MARK: - Mixed Composition
 
     @Test
     func `Lens + Prism = Affine`() {
